@@ -1,0 +1,51 @@
+version: '3.3'
+services:
+  rabbitmq:
+        image: rabbitmq:management
+        container_name: rabbitmq
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+        networks:
+            - default
+        healthcheck:
+            test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+            interval: 5s
+            timeout: 15s
+            retries: 1
+  mariadb:
+    image: mariadb:10.2
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: localhost
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    networks:
+      - network
+    restart: on-failure
+  realworld-springboot:
+    image: realworld-springboot
+    container_name: realworld-springboot
+    hostname : realworld-springboot
+    restart: always
+    depends_on:
+      - rabbitmq-server
+    ports:
+      - 8081:8081
+    networks:
+      - network
+  realworld-php:
+    image: realworld-php
+    container_name: realworld-php
+    hostname : realworld-php
+    restart: always
+    depends_on:
+      - rabbitmq-server
+    ports:
+      - 8080:8080
+    networks:
+      - network   
+networks:
+  network:
+    external: true
+    
