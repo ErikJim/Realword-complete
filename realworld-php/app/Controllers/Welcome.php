@@ -26,7 +26,7 @@ class Welcome extends BaseController {
                     $wordsLength = "less-than-" . strval($limit);
                     break;
                 } else {
-                    $wordsLength = "less-than-100";
+                    $wordsLength = "over-100";
                     break;
                 }    
             }
