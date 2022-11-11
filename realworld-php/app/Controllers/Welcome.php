@@ -12,7 +12,19 @@ class Welcome extends BaseController {
         $connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
         $channel = $connection->channel();
         $callback = function ($message) {
-            $article = explode(" ", $message->body);
+            $this->saveDataBase($message->body);
+        };
+        $channel->queue_declare($queue, false, false, false, false);
+        $channel->basic_consume($queue, '', false, true, false, false, $callback);
+
+        // Loop as long as the channel has callbacks registered
+        while (count($channel->callbacks)) {
+            $channel->wait();
+        }
+    }
+
+    public function saveDataBase($message) {
+        $article = explode(" ", $message);
             $counter = 0;
             foreach ($article as $substring) {
                 if (strlen($substring) > 2) {
@@ -26,7 +38,7 @@ class Welcome extends BaseController {
                     $wordsLength = "less-than-" . strval($limit);
                     break;
                 } else {
-                    $wordsLength = "over-100";
+                    $wordsLength = "less-than-100";
                     break;
                 }    
             }
@@ -45,14 +57,6 @@ class Welcome extends BaseController {
                 'articles_comments'	=> $sumatory,
             ];
             $counterModel->save($count);
-        };
-        $channel->queue_declare($queue, false, false, false, false);
-        $channel->basic_consume($queue, '', false, true, false, false, $callback);
-
-        // Loop as long as the channel has callbacks registered
-        while (count($channel->callbacks)) {
-            $channel->wait();
-        }
     }
 
 }
