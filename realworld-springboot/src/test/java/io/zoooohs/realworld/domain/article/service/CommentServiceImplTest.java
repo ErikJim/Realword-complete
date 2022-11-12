@@ -7,6 +7,8 @@ import io.zoooohs.realworld.domain.article.entity.CommentEntity;
 import io.zoooohs.realworld.domain.article.repository.ArticleRepository;
 import io.zoooohs.realworld.domain.article.repository.CommentRepository;
 import io.zoooohs.realworld.domain.article.servie.CommentServiceImpl;
+import io.zoooohs.realworld.domain.article.servie.RabbitMQProducerService;
+import io.zoooohs.realworld.domain.article.servie.RabbitMQProducerServiceImpl;
 import io.zoooohs.realworld.domain.profile.service.ProfileService;
 import io.zoooohs.realworld.domain.user.dto.UserDto;
 import io.zoooohs.realworld.domain.user.entity.UserEntity;
@@ -34,6 +36,9 @@ public class CommentServiceImplTest {
     @Mock
     ProfileService profileService;
 
+    @Mock
+    RabbitMQProducerServiceImpl rabbitMQProducerService;
+
     UserDto.Auth authUser;
     ArticleDto article;
     String expectedSlug;
@@ -44,7 +49,8 @@ public class CommentServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        commentService = new CommentServiceImpl(articleRepository, commentRepository, profileService);
+        commentService = new CommentServiceImpl(articleRepository, commentRepository,
+                profileService, rabbitMQProducerService);
 
         authUser = UserDto.Auth.builder()
                 .id(1L)

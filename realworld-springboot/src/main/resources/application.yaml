@@ -16,7 +16,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   rabbitmq:
-    host: localhost
+    host: rabbitmq-realworld
     port: 5672
     username: guest
     password: guest

@@ -23,18 +23,18 @@ services:
     networks:
       - default
     restart: on-failure
-  #realworld-springboot:
-  #  image: realworld-springboot
-  #  container_name: realworld-springboot
-  #  hostname : realworld-springboot
-  #  restart: always
-  #  depends_on:
-  #    - rabbitmq-server
-  #    - mariadb
-  #  ports:
-  #    - 8081:8081
-  #  networks:
-  #    - network
+  realworld-spring:
+    image: realworld
+    container_name: realworld
+    hostname : realworld
+    restart: always
+    depends_on:
+      - rabbitmq-realworld
+      - mariadb
+    ports:
+      - 8080:8080
+    networks:
+      - default
   #realworld-php:
   #  image: realworld-php
   #  container_name: realworld-php

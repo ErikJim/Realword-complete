@@ -8,6 +8,8 @@ import io.zoooohs.realworld.domain.article.model.FeedParams;
 import io.zoooohs.realworld.domain.article.repository.ArticleRepository;
 import io.zoooohs.realworld.domain.article.repository.FavoriteRepository;
 import io.zoooohs.realworld.domain.article.servie.ArticleServiceImpl;
+import io.zoooohs.realworld.domain.article.servie.RabbitMQProducerService;
+import io.zoooohs.realworld.domain.article.servie.RabbitMQProducerServiceImpl;
 import io.zoooohs.realworld.domain.profile.dto.ProfileDto;
 import io.zoooohs.realworld.domain.profile.entity.FollowEntity;
 import io.zoooohs.realworld.domain.profile.repository.FollowRepository;
@@ -51,6 +53,9 @@ public class ArticleServiceImplTest {
     @Mock
     FavoriteRepository favoriteRepository;
 
+    @Mock
+    RabbitMQProducerServiceImpl rabbitMQProducerService;
+
     private ArticleDto article;
     private String expectedSlug;
     private UserEntity author;
@@ -59,7 +64,8 @@ public class ArticleServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        articleService = new ArticleServiceImpl(articleRepository, followRepository, favoriteRepository, profileService);
+        articleService = new ArticleServiceImpl(articleRepository, followRepository,
+                favoriteRepository, profileService, rabbitMQProducerService);
         authUser = UserDto.Auth.builder()
                 .id(1L)
                 .email("email@email.com")
