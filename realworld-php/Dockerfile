@@ -27,10 +27,5 @@ RUN apt-get clean \
     && rm -r /var/lib/apt/lists/*
     
 VOLUME /var/www/html
-
-#====================================================================#
-#                          SET WORKDIR                               #
-#====================================================================#
 WORKDIR /var/www/html/codeigniter4
 
-CMD ["bash", "/startScript.sh"]
